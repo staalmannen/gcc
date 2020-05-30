@@ -273,6 +273,10 @@ case ${host} in
       ;;
   esac
   ;;
+i[34567]86-*-plan9*)
+	extra_parts="$extra_parts crti.o crtbegin.o crtend.o crtn.o"
+	tmake_file="$tmake_file i386/t-crtstuff t-crtstuff-pic t-libgcc-pic"
+	;;
 *-*-rtems*)
   tmake_file="$tmake_file t-rtems"
   extra_parts="crtbegin.o crtend.o"

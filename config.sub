@@ -477,6 +477,10 @@ case $1 in
 				basic_machine=hppa-unknown
 				os=linux
 				;;
+			plan9)
+				basic_machine=
+				os=plan9
+				;;
 			pw32)
 				basic_machine=i586-unknown
 				os=pw32
