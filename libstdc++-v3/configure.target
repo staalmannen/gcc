@@ -90,6 +90,9 @@ case "${target_os}" in
   netbsd*)
     os_include_dir="config/os/bsd/netbsd"
     ;;
+  plan9*)
+    os_include_dir="config/os/plan9"
+    ;;
   solaris2.5*)
     os_include_dir="config/os/solaris/solaris2.5"
     ;;

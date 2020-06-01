@@ -1,0 +1,53 @@
+NEED:
+find
+
+gmake:
+gmake configure needs a --localedir option (set it to /sys/lib/gnu/locale).  or make it obey --datadir
+remember to add it in i18n directory
+changed gettext.c to fix a bug
+configure script broken (old autoconf bug; run autoconf-2.50)
+config.guess, config.sub taught about Plan 9
+
+(gnu)-APE:
+putenv bug fixed
+time() made to use pread
+install script changed.
+
+m4:
+fix configure file
+provide for setting of bindir (or manually edit Makefiles)
+needs to check for mktemp in -lbsd (temp added to Makefile)
+
+autoconf, automake:
+should put portable scripts under /rc/bin/... (and only build once for an installall)
+
+texinfo:
+updated config.guess, config.sub
+it wants to create links :-(
+hacked config.status to not make link.  copied file by hand.
+further problems.  installed makeinfo by itself.  doesn't work.
+
+binutils:
+update config.guess, config.sub
+complete list of modified files in binutils-2.11.2/plan9-files
+run auto*, aclocal a lot
+see gettext
+have to hit return a few times during build!  'shell for | sort' is blocking on stdin!
+using gettext doesn't seem to work; binutils still wants to use its own.
+went back to an old configure script for intl directory for now
+todo: fix a.outx.h
+removed all stabs of type N_GSYM in obj-plan9.c; investigate this further later
+
+gcc:
+
+gdb:
+? partial-stab.h
+
+gettext:
+update config.guess, config.sub
+using latest version since the one supplied with binutils has problems
+it doesn't work either :-(
+major bandaids applied; bind true to various /bin/a*
+changed decl of strcasecmp for gnu
+2 long file names, breaks man
+created env script

@@ -45,4 +45,7 @@ AC_SUBST(ZLIBS)
 AC_SUBST(ZDEPS)
 AC_SUBST(ZINCS)
 
+# Plan 9, putenv in -lbsd.
+AC_SEARCH_LIBS(putenv, bsd)
+
 AC_OUTPUT(Makefile install-defs.sh)
