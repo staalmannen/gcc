@@ -1,0 +1,3 @@
+# Make assignments for compiling on Plan 9
+CC=pcc -c
+OLDCC=pcc -c
