@@ -270,6 +270,7 @@ static void process_command		PARAMS ((int, const char *const *));
 static int execute			PARAMS ((void));
 static void clear_args			PARAMS ((void));
 static void fatal_error			PARAMS ((int));
+static void set_input			PARAMS ((const char *));
 static void init_gcc_specs              PARAMS ((struct obstack *,
 						 const char *,
 						 const char *));
@@ -1990,6 +1991,7 @@ clear_failure_queue ()
    use come from an obstack, we don't have to worry about allocating
    space for them.  */
 
+#ifndef Plan9
 #ifndef HAVE_PUTENV
 
 void
@@ -2035,6 +2037,7 @@ putenv (str)
 }
 
 #endif /* HAVE_PUTENV */
+#endif
 
 /* Build a list of search directories from PATHS.
    PREFIX is a string to prepend to the list.
@@ -3042,7 +3045,7 @@ process_command (argc, argv)
   /* Set up the default search paths.  If there is no GCC_EXEC_PREFIX,
      see if we can create it from the pathname specified in argv[0].  */
 
-#ifndef VMS
+#if !defined(VMS) && !defined(Plan9)
   /* FIXME: make_relative_prefix doesn't yet work for VMS.  */
   if (!gcc_exec_prefix)
     {
@@ -3584,14 +3587,18 @@ process_command (argc, argv)
 	      PREFIX_PRIORITY_LAST, 1, warn_std_ptr);
   add_prefix (&exec_prefixes, standard_exec_prefix, "BINUTILS",
 	      PREFIX_PRIORITY_LAST, 2, warn_std_ptr);
+#ifndef Plan9
   add_prefix (&exec_prefixes, standard_exec_prefix_1, "BINUTILS",
 	      PREFIX_PRIORITY_LAST, 2, warn_std_ptr);
 #endif
+#endif
 
+#ifndef Plan9
   add_prefix (&startfile_prefixes, standard_exec_prefix, "BINUTILS",
 	      PREFIX_PRIORITY_LAST, 1, warn_std_ptr);
   add_prefix (&startfile_prefixes, standard_exec_prefix_1, "BINUTILS",
 	      PREFIX_PRIORITY_LAST, 1, warn_std_ptr);
+#endif
 
   tooldir_prefix = concat (tooldir_base_prefix, spec_machine,
 			   dir_separator_str, NULL_PTR);
@@ -3626,9 +3633,11 @@ process_command (argc, argv)
 			       dir_separator_str, tooldir_prefix, NULL_PTR);
     }
 
+#ifndef Plan9
   add_prefix (&exec_prefixes,
 	      concat (tooldir_prefix, "bin", dir_separator_str, NULL_PTR),
 	      "BINUTILS", PREFIX_PRIORITY_LAST, 0, NULL_PTR);
+#endif
   add_prefix (&startfile_prefixes,
 	      concat (tooldir_prefix, "lib", dir_separator_str, NULL_PTR),
 	      "BINUTILS", PREFIX_PRIORITY_LAST, 0, NULL_PTR);
@@ -5677,8 +5686,10 @@ main (argc, argv)
 	{
 	  add_prefix (&exec_prefixes, md_exec_prefix, "GCC",
 		      PREFIX_PRIORITY_LAST, 0, NULL_PTR);
+#ifndef Plan9
 	  add_prefix (&startfile_prefixes, md_exec_prefix, "GCC",
 		      PREFIX_PRIORITY_LAST, 0, NULL_PTR);
+#endif
 	}
 
       if (*md_startfile_prefix)
@@ -5710,10 +5721,12 @@ main (argc, argv)
 		      NULL_PTR, PREFIX_PRIORITY_LAST, 0, NULL_PTR);
 	}
 
+#ifndef Plan9
       add_prefix (&startfile_prefixes, standard_startfile_prefix_1,
 		  "BINUTILS", PREFIX_PRIORITY_LAST, 0, NULL_PTR);
       add_prefix (&startfile_prefixes, standard_startfile_prefix_2,
 		  "BINUTILS", PREFIX_PRIORITY_LAST, 0, NULL_PTR);
+#endif
 #if 0 /* Can cause surprises, and one can use -B./ instead.  */
       add_prefix (&startfile_prefixes, "./", NULL_PTR,
 		  PREFIX_PRIORITY_LAST, 1, NULL_PTR);
@@ -5727,6 +5740,11 @@ main (argc, argv)
 		    concat (gcc_exec_prefix, machine_suffix,
 			    standard_startfile_prefix, NULL_PTR),
 		    "BINUTILS", PREFIX_PRIORITY_LAST, 0, NULL_PTR);
+#ifdef Plan9
+      else
+	add_prefix (&startfile_prefixes, standard_startfile_prefix, "BINUTILS",
+		    PREFIX_PRIORITY_LAST, 0, NULL_PTR);
+#endif
     }
 
   /* Process any user specified specs in the order given on the command
