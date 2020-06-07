@@ -326,7 +326,12 @@ lang_specific_driver (struct cl_decoded_option **in_decoded_options,
       added_libraries++;
       j++;
       /* Add target-dependent static library, if necessary.  */
-      if ((static_link || library > 1) && LIBSTDCXX_STATIC != NULL)
+      /* Always for Plan 9 */
+      if (
+#ifndef Plan9
+(static_link || library > 1) &&
+#endif
+ LIBSTDCXX_STATIC != NULL)
 	{
 	  generate_option (OPT_l, LIBSTDCXX_STATIC, 1,
 			   CL_DRIVER, &new_decoded_options[j]);

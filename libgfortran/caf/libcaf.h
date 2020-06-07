@@ -26,7 +26,11 @@ see the files COPYING3 and COPYING.RUNTIME respectively.  If not, see
 #ifndef LIBCAF_H
 #define LIBCAF_H
 
+#ifdef Plan9
+#include <inttypes.h>   /* For int32_t.  */
+#else
 #include <stdint.h>	/* For int32_t.  */
+#endif
 #include <stddef.h>	/* For ptrdiff_t.  */
 
 #ifndef __GNUC__

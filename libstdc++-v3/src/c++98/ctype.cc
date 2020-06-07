@@ -48,6 +48,12 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   locale::id ctype<wchar_t>::id;
 #endif
 
+#ifdef Plan9
+// I made a dummy ctype_configure_char.cc in order to not use
+// inline what it cannot be used inlined for static linking :(
+#include <bits/ctype_noninline.h>
+#endif
+
   const size_t ctype<char>::table_size;
 
   ctype<char>::~ctype()

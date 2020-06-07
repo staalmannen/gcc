@@ -32,6 +32,9 @@
 #ifndef _GLIBCXX_PARALLEL_TYPES_H
 #define _GLIBCXX_PARALLEL_TYPES_H 1
 
+#ifdef Plan9
+#include <inttypes.h>
+#endif
 #include <cstdlib>
 #include <limits>
 #include <tr1/cstdint>

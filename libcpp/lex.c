@@ -356,7 +356,8 @@ search_line_mmx (const uchar *s, const uchar *end ATTRIBUTE_UNUSED)
 }
 
 /* A version of the fast scanner using SSE2 vectorized byte compare insns.  */
-
+#ifndef Plan9
+/* Avoid General Protection Fault movdqa because we haven't SSE2 support. */
 static const uchar *
 #ifndef __SSE2__
 __attribute__((__target__("sse2")))
@@ -471,6 +472,8 @@ search_line_sse42 (const uchar *s, const uchar *end)
 #define search_line_sse42 search_line_sse2
 #endif
 
+#endif /* Plan9 */
+
 /* Check the CPU capabilities.  */
 
 #include "../gcc/config/i386/cpuid.h"
@@ -494,14 +497,28 @@ init_vectorized_lexer (void)
   minimum = 1;
 #endif
 
+/* From here Plan9 has only mmx for search_line, see above. */
+
   if (minimum == 3)
+#ifndef Plan9
     impl = search_line_sse42;
+#else
+    impl = search_line_mmx;
+#endif
   else if (__get_cpuid (1, &dummy, &dummy, &ecx, &edx) || minimum == 2)
     {
       if (minimum == 3 || (ecx & bit_SSE4_2))
+#ifndef Plan9
         impl = search_line_sse42;
+#else
+	impl = search_line_mmx;
+#endif
       else if (minimum == 2 || (edx & bit_SSE2))
+#ifndef Plan9
 	impl = search_line_sse2;
+#else
+        impl = search_line_mmx;
+#endif
       else if (minimum == 1 || (edx & bit_SSE))
 	impl = search_line_mmx;
     }

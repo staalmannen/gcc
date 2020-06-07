@@ -241,6 +241,8 @@ case ${host} in
     echo "*** linking with posix.dll is not allowed by the GNU GPL."
     exit 1
     ;;
+  i[34567]86-*-plan9*)
+    ;;
   i[34567]86-*-darwin* | x86_64-*-darwin*)
     out_host_hook_obj="${out_host_hook_obj} host-i386-darwin.o"
     host_xmake_file="${host_xmake_file} i386/x-darwin"
