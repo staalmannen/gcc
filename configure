@@ -3395,6 +3395,9 @@ case "${target}" in
   i[3456789]86-*-mingw*)
     noconfigdirs="$noconfigdirs ${libgcj}"
     ;;
+  i[3456789]86-*-plan9*)
+    noconfigdirs="$noconfigdirs ${libgcj} target-libffi"
+    ;;
   x86_64-*-mingw*)
     noconfigdirs="$noconfigdirs ${libgcj}"
     ;;

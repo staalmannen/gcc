@@ -34,7 +34,11 @@
 
 #include <bits/c++config.h>
 #include <stdbool.h>
+#ifndef Plan9
 #include <stdint.h>
+#else
+#include <inttypes.h>
+#endif
 #include <bits/atomic_lockfree_defines.h>
 
 namespace std _GLIBCXX_VISIBILITY(default)
@@ -115,6 +119,29 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
   // Base types for atomics.
   template<typename _IntTp>
     struct __atomic_base;
+
+#ifdef Plan9
+typedef char int_least8_t;
+typedef short int_least16_t;
+typedef int int_least32_t;
+typedef long long int int_least64_t;
+typedef unsigned char uint_least8_t;
+typedef unsigned short uint_least16_t;
+typedef unsigned int uint_least32_t;
+typedef long long unsigned int uint_least64_t;
+
+typedef int int_fast8_t;
+typedef int int_fast16_t;
+typedef int int_fast32_t;
+typedef long long int int_fast64_t;
+typedef unsigned int uint_fast8_t;
+typedef unsigned int uint_fast16_t;
+typedef unsigned int uint_fast32_t;
+typedef long long unsigned int uint_fast64_t;
+
+typedef int intmax_t;
+typedef unsigned int uintmax_t;
+#endif
 
   /// atomic_char
   typedef __atomic_base<char>  	       		atomic_char;

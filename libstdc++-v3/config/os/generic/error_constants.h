@@ -39,6 +39,18 @@ _GLIBCXX_BEGIN_NAMESPACE_VERSION
 
   enum class errc
     {
+#ifdef Plan9
+// Too many levels of symbolic links
+// There is no ELOOP in Plan9, there are no symlinks
+#define ELOOP  62
+// Illegal byte sequence
+#define EILSEQ 123
+// Those are not implemented in Plan9 so define as others that yes.
+#define EALREADY EADDRINUSE
+#define ECONNRESET ENETRESET
+#define ENOMSG   EMSGSIZE
+#define EWOULDBLOCK ECONNREFUSED
+#endif
       address_family_not_supported = 		EAFNOSUPPORT,
       address_in_use = 				EADDRINUSE,
       address_not_available = 			EADDRNOTAVAIL,

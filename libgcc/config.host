@@ -623,6 +623,14 @@ x86_64-*-mingw*)
 i[34567]86-*-interix[3-9]*)
 	tmake_file="$tmake_file i386/t-interix i386/t-chkstk"
 	;;
+i[34567]86-*-plan9)             # Plan9 386
+        tmake_eh_file="i386/t-sjlj-eh"
+        case ${target_thread_file} in
+          posix)
+            tmake_file="${tmake_file} ${tmake_eh_file} t-plan9-thread"
+          ;;
+        esac
+        ;;
 ia64*-*-elf*)
 	extra_parts="$extra_parts crtbeginS.o crtendS.o crtfastmath.o"
 	tmake_file="ia64/t-ia64 ia64/t-ia64-elf ia64/t-eh-ia64 t-crtfm"

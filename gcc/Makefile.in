@@ -445,7 +445,7 @@ LINKER_PLUGIN_API_H = $(srcdir)/../include/plugin-api.h
 LTO_SYMTAB_H = $(srcdir)/../include/lto-symtab.h
 
 # Default native SYSTEM_HEADER_DIR, to be overridden by targets.
-NATIVE_SYSTEM_HEADER_DIR = @NATIVE_SYSTEM_HEADER_DIR@
+NATIVE_SYSTEM_HEADER_DIR = /usr/pkg/include
 # Default cross SYSTEM_HEADER_DIR, to be overridden by targets.
 CROSS_SYSTEM_HEADER_DIR = @CROSS_SYSTEM_HEADER_DIR@
 
@@ -1906,7 +1906,7 @@ collect2$(exeext): $(COLLECT2_OBJS) $(LIBDEPS)
 		$(COLLECT2_OBJS) $(LIBS) $(COLLECT2_LIBS)
 	mv -f T$@ $@
 
-CFLAGS-collect2.o += -DTARGET_MACHINE=\"$(target_noncanonical)\" \
+CFLAGS-collect2.o += -fpermissive -DTARGET_MACHINE=\"$(target_noncanonical)\" \
 	@TARGET_SYSTEM_ROOT_DEFINE@
 collect2.o : collect2.c $(CONFIG_H) $(SYSTEM_H) coretypes.h $(TM_H) intl.h \
 	$(OBSTACK_H) $(DEMANGLE_H) collect2.h collect2-aix.h version.h \
@@ -1923,6 +1923,7 @@ lto-wrapper$(exeext): lto-wrapper.o ggc-none.o libcommon-target.a $(LIBDEPS)
 	    lto-wrapper.o ggc-none.o libcommon-target.a $(LIBS)
 	mv -f T$@ $@
 
+CFLAGS-lto-wrapper.o += -fpermissive
 lto-wrapper.o: lto-wrapper.c $(CONFIG_H) $(SYSTEM_H) coretypes.h intl.h \
 	$(OBSTACK_H) $(DIAGNOSTIC_H) $(OPTS_H) $(OPTIONS_H)
 
@@ -2040,6 +2041,7 @@ DRIVER_DEFINES = \
   `test "X$${SHLIB}" = "X" || test "@enable_shared@" != "yes" || echo "-DENABLE_SHARED_LIBGCC"` \
   -DCONFIGURE_SPECS="\"@CONFIGURE_SPECS@\""
 
+CFLAGS-gcc.o += -fpermissive
 gcc.o: gcc.c $(CONFIG_H) $(SYSTEM_H) coretypes.h $(TM_H) intl.h multilib.h \
     Makefile $(lang_specs_files) specs.h prefix.h $(GCC_H) $(FLAGS_H) \
     configargs.h $(OBSTACK_H) $(OPTS_H) $(DIAGNOSTIC_H) $(VEC_H) $(PARAMS_H)
@@ -2689,7 +2691,7 @@ s-bversion: BASE-VER
 
 input.o : input.c $(CONFIG_H) $(SYSTEM_H) coretypes.h intl.h $(INPUT_H)
 
-CFLAGS-toplev.o += -DTARGET_NAME=\"$(target_noncanonical)\"
+CFLAGS-toplev.o += -DTARGET_NAME=\"$(target_noncanonical)\" -fpermissive
 toplev.o : toplev.c $(CONFIG_H) $(SYSTEM_H) coretypes.h $(TM_H) $(TREE_H) \
    version.h $(RTL_H) $(FUNCTION_H) $(FLAGS_H) xcoffout.h $(INPUT_H) \
    $(INSN_ATTR_H) output.h $(DIAGNOSTIC_H) debug.h insn-config.h intl.h \
@@ -3968,7 +3970,7 @@ $(genprogerr:%=build/gen%$(build_exeext)): $(BUILD_ERRORS)
 genprog = $(genprogerr) check checksum condmd
 
 # These programs need libs over and above what they get from the above list.
-build/genautomata$(build_exeext) : BUILD_LIBS += -lm
+build/genautomata$(build_exeext) : BUILD_LIBS += #-lm
 
 # These programs are not linked with the MD reader.
 build/gengtype$(build_exeext) : build/gengtype-lex.o build/gengtype-parse.o \

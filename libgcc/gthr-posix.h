@@ -106,7 +106,11 @@ __gthrw(pthread_create)
 __gthrw(pthread_join)
 __gthrw(pthread_equal)
 __gthrw(pthread_self)
+#ifdef Plan9
+__gthrw(__pthread_detach)
+#else
 __gthrw(pthread_detach)
+#endif
 #ifndef __BIONIC__
 __gthrw(pthread_cancel)
 #endif
@@ -671,7 +675,11 @@ __gthread_join (__gthread_t __threadid, void **__value_ptr)
 static inline int
 __gthread_detach (__gthread_t __threadid)
 {
+#ifdef Plan9
+  return __gthrw_(__pthread_detach) (__threadid);
+#else
   return __gthrw_(pthread_detach) (__threadid);
+#endif
 }
 
 static inline int
